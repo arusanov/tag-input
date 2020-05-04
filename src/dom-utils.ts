@@ -67,11 +67,23 @@ type EventListener<K extends keyof HTMLElementEventMap> = (
 export function matchingEventListener<K extends keyof HTMLElementEventMap>(
   selector: string,
   listener: EventListener<K>
-) {
-  return function (this: HTMLElement, ev: HTMLElementEventMap[K]): any {
+): EventListener<K> {
+  return function (this: HTMLElement, ev: HTMLElementEventMap[K]): void {
     if (ev.target && matches.call(ev.target, selector)) {
       return listener.call(this, ev)
     }
+  }
+}
+
+export function combineEventListener<K extends keyof HTMLElementEventMap>(
+  ...listeners: EventListener<K>[]
+): EventListener<K> {
+  return function (this: HTMLElement, ev: HTMLElementEventMap[K]): void {
+    const self = this
+    listeners.every((listener) => {
+      listener.call(self, ev)
+      return !ev.defaultPrevented
+    })
   }
 }
 
@@ -104,4 +116,18 @@ export function insertTextAtCutrsorPosition(
     text +
     (input.value.substring(input.selectionEnd ?? 0) ?? '')
   )
+}
+
+/**
+ * Adjusts input width to text size
+ * @param input HTMLInput
+ * @param text
+ */
+export function adjustInputSize(input: HTMLInputElement, text: string) {
+  // More perfect measures can be done with offscreen div
+  input.style.width = text.length + 'ch'
+  // This will trigger reflow of an element so `size` attribute will affect it
+  if (input.scrollWidth > input.offsetWidth) {
+    input.style.width = input.scrollWidth + 'px'
+  }
 }

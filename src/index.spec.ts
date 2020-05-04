@@ -30,7 +30,7 @@ describe("index", () => {
         <input
           class="imput"
           placeholder="add more people…"
-          size="16"
+          style="width: 16ch;"
           type="text"
         />
       </div>
@@ -63,7 +63,7 @@ describe("index", () => {
         <input
           class="imput"
           placeholder="Add email..."
-          size="12"
+          style="width: 12ch;"
           type="text"
         />
       </div>

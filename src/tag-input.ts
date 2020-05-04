@@ -2,7 +2,9 @@ import {
   element,
   getClipboardData,
   matchingEventListener,
-  insertTextAtCutrsorPosition
+  insertTextAtCutrsorPosition,
+  adjustInputSize,
+  combineEventListener
 } from './dom-utils'
 import { Tag, TagStyles } from './tag'
 
@@ -40,23 +42,37 @@ export class TagInput {
         beforepaste: this.onPaste
       }))
     )
-    node.addEventListener(
-      'click',
-      matchingEventListener(`.${this.options.style['tag-close']}`, (e) => {
-        //Remove tag
-        this.tagNodes = this.tagNodes.filter((tag) => {
-          if (tag.closeButton === e.target) {
-            this.node.removeChild(tag.node)
-            this.triggerEvent(TagInputEvents.TagDeleted, tag.value)
-            return false
-          }
-          return true
-        })
-      })
-    )
+    this.initEvents()
 
     this.tagNodes = this.options.tags.map(this.createTag)
-    this.adjustInputSize()
+    adjustInputSize(this.input, this.options.placeholder)
+  }
+
+  private initEvents() {
+    this.node.addEventListener(
+      'click',
+      combineEventListener(
+        matchingEventListener(`.${this.options.style['tag-close']}`, (e) => {
+          //Remove tag
+          this.tagNodes = this.tagNodes.filter((tag) => {
+            if (tag.closeButton === e.target) {
+              this.node.removeChild(tag.node)
+              this.triggerEvent(TagInputEvents.TagDeleted, tag.value)
+              return false
+            }
+            return true
+          })
+          e.preventDefault()
+        }),
+        (e) => {
+          if (!e.defaultPrevented && e.target !== this.input) {
+            // Force focus on input and scroll to it if whole area was clicked
+            this.node.scrollTop = this.node.scrollHeight
+            this.input.focus()
+          }
+        }
+      )
+    )
   }
 
   public addItem(value: string) {
@@ -109,11 +125,7 @@ export class TagInput {
 
   private onInput = () => {
     this.node.scrollTop = this.node.scrollHeight
-    this.adjustInputSize()
-  }
-
-  private adjustInputSize = () => {
-    this.input.size = (this.inputValue || this.options.placeholder).length
+    adjustInputSize(this.input, this.inputValue || this.options.placeholder)
   }
 
   private onInputKeydown = (e: KeyboardEvent) => {
