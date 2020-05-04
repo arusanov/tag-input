@@ -1,0 +1,43 @@
+.tag {
+  display: inline-block;
+  margin: 2px;
+}
+
+.tag-close {
+  outline: 0;
+  border: 0;
+  background: none;
+  padding: 0 0 0 8px;
+  cursor: pointer;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.tag-valid {
+  background: rgba(102, 153, 255, 0.2);
+  border-radius: 100px;
+  padding: 0 10px;
+}
+
+.tag-invalid {
+  border-bottom: 1px dashed #d92929;
+}
+
+.input {
+  margin: 2px;
+  border: 0;
+  outline: 0;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  max-width: 100%;
+}
+
+.input::placeholder {
+  color: #c3c2cf;
+}
+
+.input:-ms-input-placeholder {
+  line-height: normal;
+  display: inline-block;
+}

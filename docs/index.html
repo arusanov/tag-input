@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* some general outer styles */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        padding: 50px;
+        font-family: 'Open Sans', sans-serif;
+      }
+      .demo {
+        border-radius: 8px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+          0 6px 6px rgba(0, 0, 0, 0.23);
+        max-width: 540px;
+        margin: 0 auto;
+        /* as it is a demo lets put figma font settings right here*/
+        font-size: 14px;
+        line-height: 24px;
+        overflow: hidden;
+      }
+
+      .form {
+        padding: 32px 50px 24px 50px;
+        background: #f8f8f7;
+      }
+
+      h3 {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 20px;
+        line-height: 27px;
+        color: #050038;
+        margin-bottom: 24px;
+      }
+
+      .buttons {
+        background: #ffffff;
+        padding: 24px 50px 32px 50px;
+      }
+
+      .buttons > button {
+        background: #4262ff;
+        border-radius: 6px;
+        padding: 8px 16px;
+        outline: 0;
+        border: 0;
+        color: #ffffff;
+        white-space: nowrap;
+        margin-right: 16px;
+      }
+
+      #emails-input {
+        background: #ffffff;
+        border: 1px solid #c3c2cf;
+        border-radius: 4px;
+        height: 96px;
+        margin-bottom: 24px;
+        overflow-y: auto;
+        padding: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo">
+      <div class="form">
+        <h3>Share <strong>Board name</strong> with others</h3>
+        <div id="emails-input"></div>
+      </div>
+      <div class="buttons">
+        <button id="add_emails">Add Email</button>
+        <button id="get_emails">Get Emails Count</button>
+      </div>
+    </div>
+    <!-- form footer, buttons -->
+    <script src="tag-input.umd.js" charset="UTF-8"></script>
+    <script>
+      var randomEmails = [
+        'aaa@bbb.cc',
+        'max@mail.ru',
+        'invalid.email',
+        'not an email at all'
+      ]
+      var inputContainerNode = document.querySelector('#emails-input')
+      var emailsInput = EmailsInput(inputContainerNode, {})
+
+      inputContainerNode.addEventListener('tagadded', function (e) {
+        console.log('email added', e.detail.tag)
+      })
+      inputContainerNode.addEventListener('tagdeleted', function (e) {
+        console.log('email deleted', e.detail.tag)
+      })
+
+      // Handling Add email and Get emails count buttons, etc.
+      document
+        .getElementById('add_emails')
+        .addEventListener('click', function () {
+          emailsInput.addItem(
+            randomEmails[~~(Math.random() * randomEmails.length)]
+          )
+        })
+
+      document
+        .getElementById('get_emails')
+        .addEventListener('click', function () {
+          alert(emailsInput.tags.length)
+        })
+    </script>
+  </body>
+</html>
