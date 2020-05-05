@@ -2,6 +2,7 @@ import { element } from './dom-utils'
 
 export interface TagStyles {
   tag: string
+  'tag-text': string
   'tag-close': string
   'tag-valid': string
   'tag-invalid': string
@@ -23,7 +24,11 @@ export class Tag {
           valid ? style['tag-valid'] : style['tag-invalid']
         }`
       },
-      document.createTextNode(value),
+      element(
+        'span',
+        { className: style['tag-text'] },
+        document.createTextNode(value)
+      ),
       (this.closeButton = element('button', {
         className: style['tag-close'],
         innerText: '×'

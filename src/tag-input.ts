@@ -10,6 +10,7 @@ import { Tag, TagStyles } from './tag'
 
 export interface TagInputStyles extends TagStyles {
   input: string
+  container: string
 }
 
 export interface TagInputOptions {
@@ -17,6 +18,7 @@ export interface TagInputOptions {
   validate: (tagValue: string) => boolean
   style: TagInputStyles
   tags: string[]
+  type: 'text' | 'email'
 }
 
 const enum TagInputEvents {
@@ -30,14 +32,15 @@ export class TagInput {
 
   constructor(private node: HTMLElement, private options: TagInputOptions) {
     // Create input inside provided element
+    node.classList.add(options.style.container)
     node.appendChild(
       (this.input = element('input', {
-        type: 'text',
+        type: options.type,
         placeholder: this.options.placeholder,
         className: this.options.style.input,
         oninput: this.onInput,
         onblur: this.onCreateTag,
-        onkeydown: this.onInputKeydown,
+        onkeydown: this.onInputKey,
         onpaste: this.onPaste,
         beforepaste: this.onPaste
       }))
@@ -100,7 +103,7 @@ export class TagInput {
     const content = getClipboardData(e)
     if (content) {
       const parts = content.split(',')
-      let part: string | undefined = undefined
+      let part: string | undefined
       // Try validating all parts. When validation fails - stop
       while ((part = parts.shift()) && this.options.validate(part.trim())) {
         this.createTag(part.trim())
@@ -125,12 +128,16 @@ export class TagInput {
 
   private onInput = () => {
     this.node.scrollTop = this.node.scrollHeight
-    adjustInputSize(this.input, this.inputValue || this.options.placeholder)
+    adjustInputSize(this.input, this.inputValue, this.options.placeholder)
   }
 
-  private onInputKeydown = (e: KeyboardEvent) => {
+  private onInputKey = (e: KeyboardEvent) => {
     // Not sure whys 'space' isn't here
-    if (e.key === 'Enter' || e.key === ',') {
+    if (
+      e.key === 'Enter' ||
+      e.key === ',' ||
+      e.keyCode === 44 /* ',' code weird fix for android virtual keyboard */
+    ) {
       e.preventDefault()
       this.onCreateTag()
     }

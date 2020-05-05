@@ -24,7 +24,9 @@ module.exports = {
             options: {
               sourceMap: false,
               esModule: true,
-              modules: true
+              modules: {
+                localIdentName: `${pkg.libraryName}-[local]_[hash:base64:5]`,
+              }
             }
           }
         ]

@@ -123,9 +123,9 @@ export function insertTextAtCutrsorPosition(
  * @param input HTMLInput
  * @param text
  */
-export function adjustInputSize(input: HTMLInputElement, text: string) {
+export function adjustInputSize(input: HTMLInputElement, ...texts: string[]) {
   // More perfect measures can be done with offscreen div
-  input.style.width = text.length + 'ch'
+  input.style.width = Math.max(...texts.map((t) => t.length)) + 'ch'
   // This will trigger reflow of an element so `size` attribute will affect it
   if (input.scrollWidth > input.offsetWidth) {
     input.style.width = input.scrollWidth + 'px'

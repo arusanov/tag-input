@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
       rel="stylesheet"
@@ -84,12 +84,13 @@
     <script>
       var randomEmails = [
         'aaa@bbb.cc',
+        'realy-long-email-that-will-ruin-wrapping@mail-server.com',
         'max@mail.ru',
         'invalid.email',
         'not an email at all'
       ]
       var inputContainerNode = document.querySelector('#emails-input')
-      var emailsInput = EmailsInput(inputContainerNode, {})
+      var emailsInput = EmailsInput(inputContainerNode)
 
       inputContainerNode.addEventListener('tagadded', function (e) {
         console.log('email added', e.detail.tag)

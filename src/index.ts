@@ -9,19 +9,23 @@ const defaultOptions: TagInputOptions = {
   validate: (tagValue: string) =>
     /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(tagValue),
   style: cssStyles.locals,
-  tags: []
+  tags: [],
+  type: 'email'
 }
 
 export = function (node: HTMLElement, options: Partial<TagInputOptions> = {}) {
   if (!node || !(node instanceof HTMLElement)) {
     throw new Error('node is null or not a dom element')
   }
+  const config = { ...defaultOptions, ...options }
+  if (!/^(text|email)$/.test(config.type)) {
+    throw new Error('type ' + config.type + ' is not supported')
+  }
   //TODO: In real world we would track deletion of TagInput and cleanup styles when there's none left
   injectStyle(cssStyles.toString())
   // Get existing tag or create new
   //TODO: In real world we should test if already cached tag has same options and if not - recreate keeping state
-  const tag =
-    tagInputs.get(node) ?? new TagInput(node, { ...defaultOptions, ...options })
+  const tag = tagInputs.get(node) ?? new TagInput(node, config)
   tagInputs.set(node, tag)
   return tag
 }

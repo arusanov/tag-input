@@ -4,9 +4,11 @@ describe("TagInput", () => {
   let targetNode: HTMLDivElement;
 
   const style: TagInputStyles = {
+    container: "container",
     input: "input",
     tag: "tag",
     "tag-close": "tag-close",
+    "tag-text": "tag-text",
     "tag-valid": "valid",
     "tag-invalid": "invalid",
   };
@@ -19,6 +21,7 @@ describe("TagInput", () => {
       ),
     style,
     tags: [],
+    type: 'email'
   };
 
   beforeEach(() => {
@@ -29,7 +32,26 @@ describe("TagInput", () => {
     const tagInput = new TagInput(targetNode, defaultOptions);
     expect(tagInput.tags).toEqual([]);
     expect(targetNode).toMatchInlineSnapshot(`
-      <div>
+      <div
+        class="container"
+      >
+        <input
+          class="input"
+          placeholder="add more people…"
+          style="width: 16ch;"
+          type="email"
+        />
+      </div>
+    `);
+  });
+
+  it("should create tag input with type 'text'", () => {
+    const tagInput = new TagInput(targetNode, { ...defaultOptions, type: 'text' });
+    expect(tagInput.tags).toEqual([]);
+    expect(targetNode).toMatchInlineSnapshot(`
+      <div
+        class="container"
+      >
         <input
           class="input"
           placeholder="add more people…"
@@ -38,7 +60,7 @@ describe("TagInput", () => {
         />
       </div>
     `);
-  });
+  })
 
   it("should create tag input with tags", () => {
     const tags = ["valid@email.com", "invalid.email"];
@@ -49,11 +71,17 @@ describe("TagInput", () => {
     expect(tagInput.tags).toEqual(tags);
     //This snapshot implicitly covers cases for valid/invalid element check
     expect(targetNode).toMatchInlineSnapshot(`
-      <div>
+      <div
+        class="container"
+      >
         <span
           class="tag valid"
         >
-          valid@email.com
+          <span
+            class="tag-text"
+          >
+            valid@email.com
+          </span>
           <button
             class="tag-close"
           />
@@ -61,7 +89,11 @@ describe("TagInput", () => {
         <span
           class="tag invalid"
         >
-          invalid.email
+          <span
+            class="tag-text"
+          >
+            invalid.email
+          </span>
           <button
             class="tag-close"
           />
@@ -70,7 +102,7 @@ describe("TagInput", () => {
           class="input"
           placeholder="add more people…"
           style="width: 16ch;"
-          type="text"
+          type="email"
         />
       </div>
     `);
@@ -91,8 +123,10 @@ describe("TagInput", () => {
       placeholder: "tag 2 placholder",
       tags: ["valid@emailcom", "invalid"],
       style: {
+        container: "custom-container",
         input: "custom-input",
         tag: "custom-tag",
+        "tag-text": "custom-tag-text",
         "tag-close": "custom-tag-close",
         "tag-valid": "custom-valid",
         "tag-invalid": "custom-invalid",
@@ -100,12 +134,17 @@ describe("TagInput", () => {
     });
     expect(document.getElementById("tag1")).toMatchInlineSnapshot(`
       <div
+        class="container"
         id="tag1"
       >
         <span
           class="tag invalid"
         >
-          invalid
+          <span
+            class="tag-text"
+          >
+            invalid
+          </span>
           <button
             class="tag-close"
           />
@@ -113,7 +152,11 @@ describe("TagInput", () => {
         <span
           class="tag invalid"
         >
-          valid@emailcom
+          <span
+            class="tag-text"
+          >
+            valid@emailcom
+          </span>
           <button
             class="tag-close"
           />
@@ -122,18 +165,23 @@ describe("TagInput", () => {
           class="input"
           placeholder="tag 1 placholder"
           style="width: 16ch;"
-          type="text"
+          type="email"
         />
       </div>
     `);
     expect(document.getElementById("tag2")).toMatchInlineSnapshot(`
       <div
+        class="custom-container"
         id="tag2"
       >
         <span
           class="custom-tag custom-invalid"
         >
-          valid@emailcom
+          <span
+            class="custom-tag-text"
+          >
+            valid@emailcom
+          </span>
           <button
             class="custom-tag-close"
           />
@@ -141,7 +189,11 @@ describe("TagInput", () => {
         <span
           class="custom-tag custom-invalid"
         >
-          invalid
+          <span
+            class="custom-tag-text"
+          >
+            invalid
+          </span>
           <button
             class="custom-tag-close"
           />
@@ -150,7 +202,7 @@ describe("TagInput", () => {
           class="custom-input"
           placeholder="tag 2 placholder"
           style="width: 16ch;"
-          type="text"
+          type="email"
         />
       </div>
     `);
@@ -175,11 +227,17 @@ describe("TagInput", () => {
       expect(tagInput.tags).toEqual(["example@mail.ru"]);
       expect(input.value).toEqual("");
       expect(targetNode).toMatchInlineSnapshot(`
-        <div>
+        <div
+          class="container"
+        >
           <span
             class="tag valid"
           >
-            example@mail.ru
+            <span
+              class="tag-text"
+            >
+              example@mail.ru
+            </span>
             <button
               class="tag-close"
             />
@@ -188,7 +246,7 @@ describe("TagInput", () => {
             class="input"
             placeholder="add more people…"
             style="width: 16ch;"
-            type="text"
+            type="email"
           />
         </div>
       `);
@@ -263,7 +321,31 @@ describe("TagInput", () => {
         "aaa@bbb.cc",
       ]);
       expect(input.value).toEqual(
-        " wrong stuff, some.mail@that-wont-get-to-list.com"
+        "wrong stuff, some.mail@that-wont-get-to-list.com"
+      );
+    });
+
+    it("should add tags on paste 2 times", () => {
+      const clipboardEvent = new Event("paste");
+
+      (clipboardEvent as any)["clipboardData"] = {
+        getData: () =>
+          " example@mail.ru, a@a.com,  aaa@bbb.cc , wrong stuff, some.mail@that-wont-get-to-list.com",
+      };
+      input.dispatchEvent(clipboardEvent);
+      input.dispatchEvent(clipboardEvent);
+
+      expect(tagInput.tags).toHaveLength(6);
+      expect(tagInput.tags).toEqual([
+        "example@mail.ru",
+        "a@a.com",
+        "aaa@bbb.cc",
+        "example@mail.ru",
+        "a@a.com",
+        "aaa@bbb.cc",
+      ]);
+      expect(input.value).toEqual(
+        "wrong stuff, some.mail@that-wont-get-to-list.comwrong stuff, some.mail@that-wont-get-to-list.com"
       );
     });
 

@@ -3,6 +3,7 @@ import { Tag, TagStyles } from "./tag";
 describe("Tag component", () => {
   const style: TagStyles = {
     tag: "tag",
+    "tag-text": "tag-text",
     "tag-close": "tag-close",
     "tag-valid": "valid",
     "tag-invalid": "invalid",
@@ -17,7 +18,11 @@ describe("Tag component", () => {
       <span
         class="tag valid"
       >
-        test
+        <span
+          class="tag-text"
+        >
+          test
+        </span>
         <button
           class="tag-close"
         />
@@ -34,7 +39,11 @@ describe("Tag component", () => {
       <span
         class="tag invalid"
       >
-        test
+        <span
+          class="tag-text"
+        >
+          test
+        </span>
         <button
           class="tag-close"
         />
@@ -51,7 +60,11 @@ describe("Tag component", () => {
       <span
         class="tag invalid"
       >
-        &lt;script&gt;alert(1)&lt;/script&gt;
+        <span
+          class="tag-text"
+        >
+          &lt;script&gt;alert(1)&lt;/script&gt;
+        </span>
         <button
           class="tag-close"
         />
