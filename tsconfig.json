@@ -6,10 +6,11 @@
     "lib": ["ES2015", "DOM"],
     "declaration": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "sourceMap": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["**/*.spec.ts","**/__mocks__"]
+  "exclude": ["**/*.spec.ts", "**/__mocks__"]
 }
