@@ -5,15 +5,14 @@ import { injectStyle } from './dom-utils'
 const tagInputs = new WeakMap<HTMLElement, TagInput>()
 
 const defaultOptions: TagInputOptions = {
-  placeholder: 'add more people…',
-  validate: (tagValue: string) =>
-    /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(tagValue),
+  placeholder: 'add tags',
+  validate: (_tagValue: string) => true,
   style: cssStyles.locals,
   tags: [],
-  type: 'email'
+  type: 'text'
 }
 
-export = function (node: HTMLElement, options: Partial<TagInputOptions> = {}) {
+export default function(node: HTMLElement, options: Partial<TagInputOptions> = {}) {
   if (!node || !(node instanceof HTMLElement)) {
     throw new Error('node is null or not a dom element')
   }
@@ -21,10 +20,7 @@ export = function (node: HTMLElement, options: Partial<TagInputOptions> = {}) {
   if (!/^(text|email)$/.test(config.type)) {
     throw new Error('type ' + config.type + ' is not supported')
   }
-  //TODO: In real world we would track deletion of TagInput and cleanup styles when there's none left
   injectStyle(cssStyles.toString())
-  // Get existing tag or create new
-  //TODO: In real world we should test if already cached tag has same options and if not - recreate keeping state
   const tag = tagInputs.get(node) ?? new TagInput(node, config)
   tagInputs.set(node, tag)
   return tag

@@ -1,15 +1,7 @@
 const pkg = require('./package.json')
 
-module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
-  entry: './src/index.ts',
-  output: {
-    library: pkg.libraryName,
-    libraryTarget: 'umd',
-    path: process.cwd(),
-    filename: pkg.main
-  },
+const config = {
+  entry: pkg.source,
   resolve: {
     extensions: ['.ts', '.js', '.css']
   },
@@ -25,7 +17,7 @@ module.exports = {
               sourceMap: false,
               esModule: true,
               modules: {
-                localIdentName: `${pkg.libraryName}-[local]_[hash:base64:5]`,
+                localIdentName: `${pkg.libraryName}-[local]_[hash:base64:5]`
               }
             }
           }
@@ -38,3 +30,15 @@ module.exports = {
     contentBase: './'
   }
 }
+
+module.exports = [
+  Object.assign({}, config, {
+    output: {
+      library: pkg.name,
+      libraryTarget: 'umd',
+      libraryExport: 'default',
+      path: process.cwd(),
+      filename: pkg.main
+    }
+  })
+]

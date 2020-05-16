@@ -1,16 +1,23 @@
 {
-  "name": "tag-input",
-  "libraryName": "EmailsInput",
-  "version": "1.0.0",
+  "name": "taginput",
+  "version": "0.0.0",
   "description": "",
-  "main": "docs/tag-input.umd.js",
-  "types": "docs/index.d.ts",
+  "keywords": [
+    "tags",
+    "input",
+    "tagsinput"
+  ],
+  "main": "./docs/tag-input.umd.js",
+  "source": "./src/index.ts",
+  "types": "./docs/index.d.ts",
   "scripts": {
     "build": "webpack -p --devtool none",
     "start": "webpack-dev-server",
     "test": "jest"
   },
-  "files": ["docs"],
+  "files": [
+    "docs"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/arusanov/tag-input.git"

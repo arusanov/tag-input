@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "docs",
     "target": "es5",
-    "module": "commonjs",
+    "module": "ESNext",
     "lib": ["ES2015", "DOM"],
     "declaration": true,
     "moduleResolution": "node",
