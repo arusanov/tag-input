@@ -1,5 +1,6 @@
 {
-  "name": "taginput",
+  "name": "@arusanov/taginput",
+  "libraryName": "taginput",
   "version": "1.0.0",
   "description": "",
   "keywords": [

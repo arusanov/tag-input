@@ -34,7 +34,7 @@ const config = {
 module.exports = [
   Object.assign({}, config, {
     output: {
-      library: pkg.name,
+      library: pkg.libraryName,
       libraryTarget: 'umd',
       libraryExport: 'default',
       path: process.cwd(),
