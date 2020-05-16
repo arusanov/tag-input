@@ -1,3 +1,5 @@
+![build](https://github.com/arusanov/tag-input/workflows/Node.js%20CI/badge.svg)
+
 # Tag Input
 
 [Demo](https://arusanov.github.io/tag-input/)
